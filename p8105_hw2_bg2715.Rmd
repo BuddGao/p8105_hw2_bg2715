@@ -1,0 +1,83 @@
+---
+title: "p8105_hw2_bg2715"
+output: github_document
+---
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+
+Problem 1
+
+Read and clean the Mr. Trash Wheel sheet.
+```{r}
+Tr_Wh_df = 
+  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", sheet = 1) %>%
+  
+  janitor::clean_names() %>%
+
+  #omitting non-data entries  
+  select(-x15, -x16, -x17) %>%
+  
+  #omitting rows that do not include dumpster-specific data
+  drop_na(date) %>%
+  
+  mutate(sports_balls = round(sports_balls))
+  
+```
+
+Read and clean precipitation data for 2018 and 2019.
+```{r}
+Prec_18 = 
+  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 7) %>%
+  
+  janitor::clean_names() %>% 
+  
+  mutate(year = 2018)
+
+
+Prec_19 = 
+  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 6) %>%
+  
+  janitor::clean_names() %>%
+  
+  mutate(year = 2019) 
+  
+Prec_18_19 = 
+  #combining precipitation datasets
+  bind_rows(Prec_18,Prec_19) %>% 
+  
+  relocate(year) %>%
+  
+  #converting month to a character variable 
+  mutate(month = month.name[month]) 
+```
+
+A paragraph about these data.
+```{r}
+#the number of observations
+nrow(Tr_Wh_df)
+
+nrow(Prec_18_19)
+
+#examples of key variables
+names(Tr_Wh_df)
+
+names(Prec_18_19)
+
+#the total precipitation in 2018
+subset(Prec_18_19, year == 2018) %>%
+  
+  pull(total) %>%
+  
+  sum()
+
+#the median number of sports balls in a dumpster in 2019
+subset(Tr_Wh_df, year == 2019) %>%
+  
+  pull(sports_balls) %>%
+  
+  median()
+```
+
