@@ -176,7 +176,7 @@ range(pull(pols_snp_unemp, year))
 
 names(pols_snp_unemp)
 ```
-The joint data has 553 columns and 11 rows. Key variables include "president", "close" and "perc_unemp". The range of years is 1969 to 2015.
+The pols_month_df contains 817 observations of 9 variables related to the number of national politicians who are democratic or republican at any given time. The snp_df contains 787 observations of 3 variables related to Standard & Poor’s stock market index (S&P), often used as a representative measure of stock market as a whole. The unemp_df contains 816 observations of 3 variables. Merging these three datasets by year and month in an inner joint, we get the joint data.The joint data has 553 columns and 11 rows. Key variables include "president", "close" and "perc_unemp". The range of years is 1969 to 2015.
 
 Problem 3
 
