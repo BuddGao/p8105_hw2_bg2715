@@ -169,7 +169,51 @@ pols_snp_unemp =
 About datasets:
 
 Problem 3
-```{r}
 
+Load and tidy the data.
+```{r}
+baby_names_df = read_csv("./data/Popular_Baby_Names.csv") %>% 
+  
+  janitor::clean_names() %>% 
+  
+  distinct(year_of_birth, ethnicity, childs_first_name, .keep_all = TRUE)
+```
+
+table showing the rank in popularity of the name “Olivia” as a female baby name over time.
+```{r}
+olivia_df = pivot_wider(
+  baby_names_df,
+  names_from = year_of_birth,
+  values_from = rank
+) %>% 
+  
+  filter(childs_first_name == "Olivia")
+```
+
+table showing the most popular name among male children over time
+```{r}
+male_df = filter(
+  baby_names_df,
+  rank == "1",
+  gender == "MALE"
+) %>% 
+  
+  pivot_wider(
+  names_from = year_of_birth,
+  values_from = childs_first_name
+) 
+```
+scatter plot
+```{r}
+scat_plot_df = filter(
+  baby_names_df,
+  gender == "MALE",
+  ethnicity == "WHITE NON HISPANIC",
+  year_of_birth == "2016"
+)
+
+plot_MW2 = ggplot(scat_plot_df, aes(x = rank, y = count, color = childs_first_name)) + geom_point() + xlab("The rank in popularity of that name") + ylab("The number of children with a name") + theme(legend.position = "none") 
+
+ggsave("plot_MW2.png")
 ```
 
