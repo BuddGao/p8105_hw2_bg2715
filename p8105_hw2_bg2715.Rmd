@@ -54,7 +54,7 @@ Prec_18_19_df =
   mutate(month = month.name[month]) 
 ```
 
-A paragraph about these data.
+A paragraph about these data:
 ```{r}
 #the number of observations
 nrow(Tr_Wh_df)
@@ -80,6 +80,7 @@ subset(Tr_Wh_df, year == 2019) %>%
   
   median()
 ```
+The Mr. Traswheel dataset has 453 rows and 14 columns.  Key variables include “weight_tons”, "cigarette_butts", “glass_bottles”, and “homes_powered.” The median number of sports balls in 2019 is 9. The combined precipitation data has 24 rows and 3 columns. Key variables include "year", "month" and "total". The total precipitation in 2018 is 70.33.
 
 Problem 2
 
@@ -166,7 +167,16 @@ pols_snp =
 pols_snp_unemp =
   inner_join(pols_snp, unemp_df, by = c("year" = "year", "month" = "month"))
 ```
-About datasets:
+
+A paragraph about these data:
+```{r}
+dim(pols_snp_unemp)
+
+range(pull(pols_snp_unemp, year))
+
+names(pols_snp_unemp)
+```
+The joint data has 553 columns and 11 rows. Key variables include "president", "close" and "perc_unemp". The range of years is 1969 to 2015.
 
 Problem 3
 
@@ -214,6 +224,6 @@ scat_plot_df = filter(
 
 plot_MW2 = ggplot(scat_plot_df, aes(x = rank, y = count, color = childs_first_name)) + geom_point() + xlab("The rank in popularity of that name") + ylab("The number of children with a name") + theme(legend.position = "none") 
 
-ggsave("plot_MW2.png")
+#ggsave("plot_MW2.png")
 ```
 
