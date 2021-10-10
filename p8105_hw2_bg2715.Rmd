@@ -4,7 +4,6 @@ output: github_document
 ---
 ```{r}
 library(tidyverse)
-library(readxl)
 ```
 
 
@@ -13,7 +12,7 @@ Problem 1
 Read and clean the Mr. Trash Wheel sheet.
 ```{r}
 Tr_Wh_df = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", sheet = 1) %>%
+  readxl::read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", sheet = 1) %>%
   
   janitor::clean_names() %>%
 
@@ -30,7 +29,7 @@ Tr_Wh_df =
 Read and clean precipitation data for 2018 and 2019.
 ```{r}
 Prec_18_df = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 7) %>%
+  readxl::read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 7) %>%
   
   janitor::clean_names() %>% 
   
@@ -38,7 +37,7 @@ Prec_18_df =
 
 
 Prec_19_df = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 6) %>%
+  readxl::read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 6) %>%
   
   janitor::clean_names() %>%
   
