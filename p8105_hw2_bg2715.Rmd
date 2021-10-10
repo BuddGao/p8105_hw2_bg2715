@@ -29,7 +29,7 @@ Tr_Wh_df =
 
 Read and clean precipitation data for 2018 and 2019.
 ```{r}
-Prec_18 = 
+Prec_18_df = 
   read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 7) %>%
   
   janitor::clean_names() %>% 
@@ -37,16 +37,16 @@ Prec_18 =
   mutate(year = 2018)
 
 
-Prec_19 = 
+Prec_19_df = 
   read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2(80).xlsx", range = "A2:B14", sheet = 6) %>%
   
   janitor::clean_names() %>%
   
   mutate(year = 2019) 
   
-Prec_18_19 = 
+Prec_18_19_df = 
   #combining precipitation datasets
-  bind_rows(Prec_18,Prec_19) %>% 
+  bind_rows(Prec_18_df,Prec_19_df) %>% 
   
   relocate(year) %>%
   
@@ -59,15 +59,15 @@ A paragraph about these data.
 #the number of observations
 nrow(Tr_Wh_df)
 
-nrow(Prec_18_19)
+nrow(Prec_18_19_df)
 
 #examples of key variables
 names(Tr_Wh_df)
 
-names(Prec_18_19)
+names(Prec_18_19_df)
 
 #the total precipitation in 2018
-subset(Prec_18_19, year == 2018) %>%
+subset(Prec_18_19_df, year == 2018) %>%
   
   pull(total) %>%
   
@@ -80,4 +80,64 @@ subset(Tr_Wh_df, year == 2019) %>%
   
   median()
 ```
+
+Problem 2
+
+clean the data in pols-month
+```{r}
+pols_month_df = 
+  read.csv("./data/pols-month.csv") %>%
+  
+  janitor::clean_names() %>%
+  
+  separate(mon, c("year", "month", "day")) %>%
+  
+  #replace month number with month name
+  mutate(month = as.numeric(month)) %>%
+  
+  mutate(month = month.name[month]) %>%
+  
+  #create a president variable taking values gop and  dem, and remove prez_dem and prez_gop
+  pivot_longer(
+    c(prez_dem, prez_gop),
+    names_to = "president",
+    names_prefix = "prez_"
+  ) %>%
+  
+  filter(value == 1) %>%
+  
+  select(-value) %>%
+  
+  #remove the day variable
+  select(-day)
+```
+
+clean the data in snp.csv
+```{r}
+snp_df = 
+  read.csv("./data/snp.csv") %>%
+  
+  mutate(
+    lubridate::mdy(date)
+  ) %>%
+  
+  select(-date) %>%
+  
+  separate("lubridate::mdy(date)", c('year', 'month', 'day')) %>%
+  
+  #replace month number with month name
+  mutate(month = as.numeric(month)) %>%
+  
+  mutate(month = month.name[month]) %>%
+  
+  select(-day) %>%
+  
+  #organize so that year and month are the leading columns
+  relocate(year, month) %>%
+  
+  #arrange according to year and month
+  arrange(year, month)
+```
+
+
 
