@@ -95,7 +95,7 @@ pols_month_df =
   #replace month number with month name
   mutate(month = as.numeric(month)) %>%
   
-  mutate(month = month.name[month]) %>%
+  mutate(month = month.abb[month]) %>%
   
   #create a president variable taking values gop and  dem, and remove prez_dem and prez_gop
   pivot_longer(
@@ -117,6 +117,8 @@ clean the data in snp.csv
 snp_df = 
   read.csv("./data/snp.csv") %>%
   
+  janitor::clean_names() %>%
+  
   mutate(
     lubridate::mdy(date)
   ) %>%
@@ -128,7 +130,7 @@ snp_df =
   #replace month number with month name
   mutate(month = as.numeric(month)) %>%
   
-  mutate(month = month.name[month]) %>%
+  mutate(month = month.abb[month]) %>%
   
   select(-day) %>%
   
@@ -140,4 +142,34 @@ snp_df =
 ```
 
 
+tidy the unemployment data so that it can be merged with the previous datasets.
+```{r}
+unemp_df = 
+  read.csv("./data/unemployment.csv") %>%
+  
+  pivot_longer(
+    Jan:Dec,
+    names_to = "month",
+    values_to = "perc_unemp"
+  ) %>% 
+  
+  rename(year = Year) %>%
+  
+  mutate(year = as.character(year))
+```
+
+Join the datasets
+```{r}
+pols_snp = 
+  inner_join(pols_month_df, snp_df, by = c("year" = "year", "month" = "month"))
+
+pols_snp_unemp =
+  inner_join(pols_snp, unemp_df, by = c("year" = "year", "month" = "month"))
+```
+About datasets:
+
+Problem 3
+```{r}
+
+```
 
